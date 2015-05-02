@@ -54,8 +54,9 @@ class EditorPerson
 
 	attr_reader :name, :affiliation, :role
 end
-
-ej = ElsevierJournal.new("Academic Pediatrics","http://www.sciencedirect.com/science/journal/18762859")
+publication_title = "Academic Pediatrics"
+publication_uri = "http://www.sciencedirect.com/science/journal/18762859"
+ej = ElsevierJournal.new(publication_title,publication_uri)
 ej.getAboutUri
 puts ej.about_uri
 ej.getEditorialUri
