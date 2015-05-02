@@ -22,11 +22,7 @@ class ElsevierJournal
       # Retrieve page from about_uri
       # Find link with text 'View full editorial board'
       # store link as editorial_uri
-      open(@about_uri) do |f|
-       puts f.read
-      end
       editorial = Nokogiri::XML(open(@about_uri))
-      puts editorial.xpath('//h1').inner_text
       @editorial_uri = editorial.xpath('//a[contains(text(), "View full editorial board")]/@href').inner_text
     end
     
