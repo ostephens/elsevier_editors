@@ -14,17 +14,20 @@ class ElsevierJournal
     attr_accessor :about_uri, :editorial_uri, :editorial_board
 
     def getAboutUri
-      # Retrieve page from kb_uri
-      # Find link with text 'About this journal'
-      # store link as about_uri
       about = Nokogiri::XML(open(@kb_uri))
-      @about_uri = about.xpath('//a[contains(text(), "About this journal"]/@href').inner_text
+      @about_uri = about.xpath('//a[contains(text(), "About this Journal")]/@href').inner_text
     end
 
     def getEditorialUri
       # Retrieve page from about_uri
       # Find link with text 'View full editorial board'
       # store link as editorial_uri
+      open(@about_uri) do |f|
+       puts f.read
+      end
+      editorial = Nokogiri::XML(open(@about_uri))
+      puts editorial.xpath('//h1').inner_text
+      @editorial_uri = editorial.xpath('//a[contains(text(), "View full editorial board")]/@href').inner_text
     end
     
     def getEditorialBoard
@@ -46,6 +49,8 @@ end
 ej = ElsevierJournal.new("Academic Pediatrics","http://www.sciencedirect.com/science/journal/18762859")
 ej.getAboutUri
 puts ej.about_uri
+ej.getEditorialUri
+puts ej.editorial_uri
 #elsevier_master_uri = "https://www.kbplus.ac.uk/kbplus/publicExport/pkg/512?format=json"
 #elsevier_master_json = open(elsevier_master_uri)
 
