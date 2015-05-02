@@ -54,25 +54,31 @@ class EditorPerson
 
 	attr_reader :name, :affiliation, :role
 end
-publication_title = "Academic Pediatrics"
-publication_uri = "http://www.sciencedirect.com/science/journal/18762859"
-ej = ElsevierJournal.new(publication_title,publication_uri)
-ej.getAboutUri
-puts ej.about_uri
-ej.getEditorialUri
-puts ej.editorial_uri
-ej.getEditorialBoard
+#publication_title = "Academic Pediatrics"
+#publication_uri = "http://www.sciencedirect.com/science/journal/18762859"
+#ej = ElsevierJournal.new(publication_title,publication_uri)
+#ej.getAboutUri
+#puts ej.about_uri
+#ej.getEditorialUri
+#puts ej.editorial_uri
+#ej.getEditorialBoard
 
-#elsevier_master_uri = "https://www.kbplus.ac.uk/kbplus/publicExport/pkg/512?format=json"
-#elsevier_master_json = open(elsevier_master_uri)
+elsevier_master_uri = "https://www.kbplus.ac.uk/kbplus/publicExport/pkg/512?format=json"
+elsevier_master_json = open(elsevier_master_uri)
 
-#elsevier_master = JSON.parse(File.read(elsevier_master_json))
+elsevier_master = JSON.parse(File.read(elsevier_master_json))
 
-#elsevier_master["titles"].each do |t|
-#	publication_title = t["title"].chomp
-#	publication_uri = t["hostPlatformURL"].chomp
-#  ej = ElsevierJournal.new(publication_title,publication_uri)
-#  ej.getEditorialBoard
+elsevier_master["titles"].each do |t|
+	publication_title = t["title"].chomp
+	publication_uri = t["hostPlatformURL"].chomp
+  ej = ElsevierJournal.new(publication_title,publication_uri)
+  puts publication_title
+  puts publication_uri
+  ej.getAboutUri
+  puts ej.about_uri
+  ej.getEditorialUri
+  puts ej.editorial_uri
+  ej.getEditorialBoard
   ej.editorial_board.each do |p|
     record = {
       'journal_title' => publication_title,
