@@ -90,4 +90,4 @@ elsevier_master["titles"].each do |t|
     ScraperWiki.save_sqlite(unique_keys=['journal_title','journal_uri','name','affiliation','role'],record)
     sleep 1
   end
-#end
+end
