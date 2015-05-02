@@ -19,15 +19,28 @@ class ElsevierJournal
     end
 
     def getEditorialUri
-      # Retrieve page from about_uri
-      # Find link with text 'View full editorial board'
-      # store link as editorial_uri
-      editorial = Nokogiri::XML(open(@about_uri))
+      editorial = Nokogiri::HTML(open(@about_uri))
       @editorial_uri = editorial.xpath('//a[contains(text(), "View full editorial board")]/@href').inner_text
     end
     
     def getEditorialBoard
-
+      board = Nokogiri::HTML(open(@editorial_uri))
+      name = ""
+      affilation = ""
+      role = ""
+      board.xpath('//div[@class="contentCol"]/div[@class="pod"]/div').each do |section|
+        section_class = section.xpath('@class').inner_text
+        if(section_class=="infoText")
+          role = section.inner_text
+          next
+        elsif(section_class=="podArticle")
+          name = section.xpath('h3/span').inner_text
+          affiliation = section.xpath('p/span').inner_text
+        else
+          next
+        end
+        @editorial_board.push(EditorPerson.new(name,affiliation,role))
+      end
     end
 
 end
@@ -47,6 +60,8 @@ ej.getAboutUri
 puts ej.about_uri
 ej.getEditorialUri
 puts ej.editorial_uri
+ej.getEditorialBoard
+
 #elsevier_master_uri = "https://www.kbplus.ac.uk/kbplus/publicExport/pkg/512?format=json"
 #elsevier_master_json = open(elsevier_master_uri)
 
@@ -57,15 +72,15 @@ puts ej.editorial_uri
 #	publication_uri = t["hostPlatformURL"].chomp
 #  ej = ElsevierJournal.new(publication_title,publication_uri)
 #  ej.getEditorialBoard
-#  ej.editorial_board.each do |p|
-#    record = {
- #     'journal_title' => publication_title,
-#      'journal_uri' => publication_uri,
-#      'name' => p.name,
-#      'affiliation' => p.affiliation,
-#      'role' => p.role
-#    }
-#    ScraperWiki.save_sqlite(unique_keys=['journal_title','journal_uri','name','affiliation','role'],record)
-#    sleep 1
-#  end
+  ej.editorial_board.each do |p|
+    record = {
+      'journal_title' => publication_title,
+      'journal_uri' => publication_uri,
+      'name' => p.name,
+      'affiliation' => p.affiliation,
+      'role' => p.role
+    }
+    ScraperWiki.save_sqlite(unique_keys=['journal_title','journal_uri','name','affiliation','role'],record)
+    sleep 1
+  end
 #end
