@@ -89,7 +89,7 @@ elsevier_master["titles"].each do |t|
     puts "Cannot get Editorial URI for " + publication_title + " using " + ej.about_uri
     next
   end
-  rescue
+  begin
     ej.getEditorialBoard
     ej.editorial_board.each do |p|
       record = {
