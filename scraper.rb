@@ -75,14 +75,12 @@ elsevier_master["titles"].each do |t|
   ej = ElsevierJournal.new(publication_title,publication_uri)
   begin
     ej.getAboutUri
-    puts ej.about_uri
   rescue
     puts "Cannot get About URI for " + publication_title + " at " + publication_uri
     next
   end
   begin
     ej.getEditorialUri
-    puts ej.editorial_uri
   rescue
     puts "Cannot get Editorial URI for " + publication_title + " at " + publication_uri
     next
