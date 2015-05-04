@@ -73,8 +73,6 @@ elsevier_master["titles"].each do |t|
 	publication_title = t["title"].chomp
 	publication_uri = t["hostPlatformURL"].chomp
   ej = ElsevierJournal.new(publication_title,publication_uri)
-  puts publication_title
-  puts publication_uri
   begin
     ej.getAboutUri
     puts ej.about_uri
@@ -86,7 +84,7 @@ elsevier_master["titles"].each do |t|
     ej.getEditorialUri
     puts ej.editorial_uri
   rescue
-    puts "Cannot get Editorial URI for " + publication_title + " using " + ej.about_uri
+    puts "Cannot get Editorial URI for " + publication_title + " at " + publication_uri
     next
   end
   begin
@@ -100,10 +98,10 @@ elsevier_master["titles"].each do |t|
         'role' => p.role
       }
       ScraperWiki.save_sqlite(unique_keys=['journal_title','journal_uri','name','affiliation','role'],record)
-      sleep 1
+      next
     end
   rescue
-    puts "Cannot get Editorial Board for " + publication_title + " from " + ej.editorial_uri
+    puts "Cannot get Editorial Board for " + publication_title + " at " + publication_uri
     next
   end
 end
